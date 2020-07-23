@@ -2,34 +2,34 @@ package tests;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import drivers.CustomWebDriver;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.WebDriverRunner.closeWebDriver;
 import static helpers.AttachmentsHelper.*;
-
+import static helpers.DriverHelper.*;
+import static helpers.Enviroment.isVideoOn;
 
 public class TestBase {
 
-    @BeforeEach
-    void beforeEach() {
-        Configuration.fastSetValue = true;
-
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true));
-        Configuration.startMaximized=true;
-        Configuration.timeout = 10000;
-        Configuration.browser = CustomWebDriver.class.getName();
+    @BeforeAll
+    public static void setUp() {
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(true));
+        configureSelenide();
     }
-
+    @BeforeEach
+    public void BeforeEachTest(){
+        Configuration.startMaximized = true;
+    }
     @AfterEach
-    void afterEach() {
+    public void afterEach(){
+        String sessionId = getSessionId();
         attachScreenshot("Last screenshot");
         attachPageSource();
-        attachBrowserConsoleLogs();
-        attachVideo();
+        attachAsText("Browser console logs", getConsoleLogs());
         closeWebDriver();
+        if (isVideoOn) attachVideo(sessionId);
     }
-
 }

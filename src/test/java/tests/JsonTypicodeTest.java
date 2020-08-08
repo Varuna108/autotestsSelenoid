@@ -13,7 +13,7 @@ public class JsonTypicodeTest extends TestBase {
 
         $("div.container:nth-child(2) div.container table.resources:nth-child(14) tbody:nth-child(1) tr:nth-child(6) td:nth-child(1) > a:nth-child(1)").click();
 
-        sleep(1000);
+        sleep(5000);
 
     }
 }

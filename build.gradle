@@ -55,6 +55,6 @@ tasks.withType(Test) {
 
 task tinkoff_tests(type: Test) {
     useJUnitPlatform {
-        includeTags 'tinkoff'
+        includeTags 'typicode'
     }
 }
